@@ -1,16 +1,13 @@
-import { CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
-export class AppEntity {
+export class Task {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @CreateDateColumn()
-  createdAt: Date;
+  @Column()
+  description: string;
 
-  @UpdateDateColumn()
-  updatedAt: Date;
-
-  @DeleteDateColumn()
-  deletedAt: Date | null;
+  @Column({ default: false })
+  completed: boolean;
 }

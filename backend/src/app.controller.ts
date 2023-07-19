@@ -1,12 +1,36 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
+import { Controller, Get, Post, Patch, Delete, Param, Query, Body } from '@nestjs/common';
+import { Task } from './app.entity';
+import { TaskService } from './app.service';
 
-@Controller()
-export class AppController {
-  constructor(private readonly appService: AppService) {}
+@Controller('tasks')
+export class TaskController {
+  constructor(private taskService: TaskService) {}
+
+  @Post()
+  createTask(@Body('description') description: string): Promise<Task> {
+    return this.taskService.createTask(description);
+  }
 
   @Get()
-  getHello(): { data: string } {
-    return this.appService.getHello();
+  getAllTasks(): Promise<Task[]> {
+    return this.taskService.getAllTasks();
+  }
+
+  @Patch(':id')
+  updateTaskStatus(
+    @Param('id') id: number,
+    @Body('completed') completed: boolean,
+  ): Promise<Task> {
+    return this.taskService.updateTaskStatus(id, completed);
+  }
+
+  @Delete(':id')
+  deleteTask(@Param('id') id: number): Promise<void> {
+    return this.taskService.deleteTask(id);
+  }
+
+  @Get('filtered')
+  getFilteredTasks(@Query('completed') completed: boolean): Promise<Task[]> {
+    return this.taskService.getFilteredTasks(completed);
   }
 }
